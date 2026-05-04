@@ -1,43 +1,58 @@
-export default async function handler(req, res) {
-  // Hanya izinkan jalur POST
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method tidak diizinkan' });
-  }
+  async function submitProof() {
+    const fileInput = document.getElementById('fileInput').files[0];
+    const nama = document.getElementById('inputNama').value;
+    const phone = document.getElementById('inputPhone').value;
 
-  try {
-    const { username, phone, imagePayload } = req.body;
-
-    // 1. VALIDASI DATA KOSONG
-    if (!username || !phone || !imagePayload) {
-      return res.status(400).json({ error: 'Data tidak lengkap. Gagal memproses.' });
+    if (!fileInput) {
+      alert('⚠️ Harap upload bukti pembayaran terlebih dahulu!');
+      return;
     }
 
-    // 2. VALIDASI FORMAT FILE KETAT
-    // Memastikan payload benar-benar diawali dengan header gambar asli, bukan teks/file zip
-    const isImage = imagePayload.startsWith('data:image/jpeg') || 
-                    imagePayload.startsWith('data:image/png') || 
-                    imagePayload.startsWith('data:image/webp');
-                    
-    if (!isImage) {
-      return res.status(403).json({ error: 'KEAMANAN AKTIF: Format file ditolak. Hanya gambar asli yang diizinkan.' });
-    }
+    goToStep(4);
+    const statusText = document.getElementById('verifyStatus');
+    statusText.textContent = "Mengenkripsi dan mengirim file ke Server Vercel...";
 
-    // 3. PROSES SUKSES
-    // Di sistem nyata, Base64 ini akan disimpan ke database (Supabase/Firebase) atau Google Drive.
-    const orderId = "MDZ-" + Math.random().toString(36).toUpperCase().substr(2, 8);
+    try {
+      const base64Image = await toBase64(fileInput);
+      
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: nama,
+          phone: phone,
+          imagePayload: base64Image
+        })
+      });
 
-    console.log(`[BERHASIL] Bukti diterima dari ${username} (${phone}) - Order: ${orderId}`);
+      // BACA SEBAGAI TEKS MENTAH DULU AGAR TIDAK CRASH JIKA VERCEL ERROR
+      const rawText = await response.text();
+      let result;
 
-    return res.status(200).json({
-      success: true,
-      message: 'Bukti lolos validasi server.',
-      data: {
-        order_id: orderId
+      try {
+        result = JSON.parse(rawText);
+      } catch (e) {
+        // JIKA MASUK KESINI, BERARTI STRUKTUR FOLDER VERCEL KAMU SALAH
+        console.error("Respon Server Bukan JSON:", rawText);
+        alert("CRITICAL ERROR: Vercel gagal memuat backend. File /api/upload.js tidak ditemukan atau konfigurasi vercel.json salah.");
+        statusText.textContent = "Backend tidak merespon.";
+        setTimeout(() => goToStep(3), 3000);
+        return;
       }
-    });
 
-  } catch (error) {
-    return res.status(500).json({ error: 'Terjadi kesalahan pada server keamanan.' });
+      if (response.ok) {
+        document.getElementById('orderCode').textContent = result.data.order_id;
+        statusText.textContent = "Validasi berhasil!";
+        setTimeout(() => goToStep(5), 800); 
+      } else {
+        alert("🚫 SERVER MENOLAK: " + result.error);
+        goToStep(3); 
+      }
+
+    } catch (error) {
+      // INI BARU ERROR KONEKSI INTERNET ASLI
+      alert("Gagal terhubung ke internet. Cek koneksi Anda.");
+      statusText.textContent = "Koneksi terputus.";
+      setTimeout(() => goToStep(3), 2000);
+    }
   }
-}
-
