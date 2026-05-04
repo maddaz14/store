@@ -1,58 +1,40 @@
-  async function submitProof() {
-    const fileInput = document.getElementById('fileInput').files[0];
-    const nama = document.getElementById('inputNama').value;
-    const phone = document.getElementById('inputPhone').value;
-
-    if (!fileInput) {
-      alert('⚠️ Harap upload bukti pembayaran terlebih dahulu!');
-      return;
-    }
-
-    goToStep(4);
-    const statusText = document.getElementById('verifyStatus');
-    statusText.textContent = "Mengenkripsi dan mengirim file ke Server Vercel...";
-
-    try {
-      const base64Image = await toBase64(fileInput);
-      
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          username: nama,
-          phone: phone,
-          imagePayload: base64Image
-        })
-      });
-
-      // BACA SEBAGAI TEKS MENTAH DULU AGAR TIDAK CRASH JIKA VERCEL ERROR
-      const rawText = await response.text();
-      let result;
-
-      try {
-        result = JSON.parse(rawText);
-      } catch (e) {
-        // JIKA MASUK KESINI, BERARTI STRUKTUR FOLDER VERCEL KAMU SALAH
-        console.error("Respon Server Bukan JSON:", rawText);
-        alert("CRITICAL ERROR: Vercel gagal memuat backend. File /api/upload.js tidak ditemukan atau konfigurasi vercel.json salah.");
-        statusText.textContent = "Backend tidak merespon.";
-        setTimeout(() => goToStep(3), 3000);
-        return;
-      }
-
-      if (response.ok) {
-        document.getElementById('orderCode').textContent = result.data.order_id;
-        statusText.textContent = "Validasi berhasil!";
-        setTimeout(() => goToStep(5), 800); 
-      } else {
-        alert("🚫 SERVER MENOLAK: " + result.error);
-        goToStep(3); 
-      }
-
-    } catch (error) {
-      // INI BARU ERROR KONEKSI INTERNET ASLI
-      alert("Gagal terhubung ke internet. Cek koneksi Anda.");
-      statusText.textContent = "Koneksi terputus.";
-      setTimeout(() => goToStep(3), 2000);
-    }
+module.exports = async function handler(req, res) {
+  // Hanya izinkan jalur POST
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method HTTP tidak diizinkan' });
   }
+
+  try {
+    const { username, phone, imagePayload } = req.body;
+
+    // 1. VALIDASI DATA KOSONG
+    if (!username || !phone || !imagePayload) {
+      return res.status(400).json({ error: 'Data tidak lengkap. Gagal memproses.' });
+    }
+
+    // 2. VALIDASI FORMAT FILE KETAT
+    // Memastikan payload benar-benar diawali dengan header gambar asli
+    const isImage = imagePayload.startsWith('data:image/jpeg') || 
+                    imagePayload.startsWith('data:image/png') || 
+                    imagePayload.startsWith('data:image/webp');
+                    
+    if (!isImage) {
+      return res.status(403).json({ error: 'SISTEM KEAMANAN: Format file ditolak. Hanya gambar asli (JPG/PNG) yang diizinkan.' });
+    }
+
+    // 3. PROSES SUKSES
+    const orderId = "MDZ-" + Math.random().toString(36).toUpperCase().substr(2, 8);
+
+    // Kirim respon sukses dalam bentuk JSON
+    return res.status(200).json({
+      success: true,
+      message: 'Bukti lolos validasi server keamanan.',
+      data: {
+        order_id: orderId
+      }
+    });
+
+  } catch (error) {
+    return res.status(500).json({ error: 'Terjadi kesalahan internal pada server keamanan.' });
+  }
+};
