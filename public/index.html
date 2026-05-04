@@ -3,232 +3,150 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>Toko Produk Premium — Bayar, Baru Kirim</title>
+  <title>MaddazXD_STORE Premium</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --bg: #0a0a0a;
-      --surface: #111111;
-      --card: #181818;
-      --border: #2a2a2a;
-      --accent: #f5c518;
-      --accent2: #e05c2a;
-      --green: #22c55e;
-      --red: #ef4444;
-      --text: #f0f0f0;
-      --muted: #888;
+      --bg: #0a0a0a; --surface: #111111; --card: #181818; --border: #2a2a2a;
+      --accent: #f5c518; --accent2: #e05c2a; --green: #22c55e; --red: #ef4444;
+      --text: #f0f0f0; --muted: #888;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     html { scroll-behavior: smooth; }
 
     body {
-      background: var(--bg);
-      color: var(--text);
+      background: var(--bg); color: var(--text);
       font-family: 'DM Sans', sans-serif;
-      min-height: 100vh;
-      overflow-x: hidden;
-      position: relative;
-    }
-
-    /* FIX KOREKSI: z-index diturunkan jadi 0 agar tidak memblokir klik di HP */
-    body::before {
-      content: '';
-      position: fixed; inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none; z-index: 0;
-      opacity: 0.35;
-    }
-
-    /* Bungkus utama dinaikkan z-index-nya agar selalu di atas efek noise */
-    .main-wrapper {
-      position: relative;
-      z-index: 10; 
+      min-height: 100vh; overflow-x: hidden;
     }
 
     header {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 1.2rem 2.5rem;
-      border-bottom: 1px solid var(--border);
+      padding: 1.2rem 2.5rem; border-bottom: 1px solid var(--border);
       position: sticky; top: 0; z-index: 100;
-      background: rgba(10,10,10,0.92);
-      backdrop-filter: blur(12px);
+      background: rgba(10,10,10,0.95);
     }
     .logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 3px; color: var(--accent); }
     .badge-secure {
-      display: flex; align-items: center; gap: 0.4rem;
-      background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.35);
-      color: var(--green); font-family: 'Space Mono', monospace; font-size: 0.7rem;
-      padding: 0.35rem 0.8rem; border-radius: 999px; letter-spacing: 1px;
+      display: flex; align-items: center; gap: 0.4rem; background: rgba(34,197,94,0.12);
+      border: 1px solid rgba(34,197,94,0.35); color: var(--green);
+      font-family: 'Space Mono', monospace; font-size: 0.7rem; padding: 0.35rem 0.8rem; border-radius: 999px;
     }
 
-    .hero { padding: 5rem 2.5rem 4rem; max-width: 900px; margin: 0 auto; text-align: center; }
-    .hero-tag {
-      display: inline-block; font-family: 'Space Mono', monospace; font-size: 0.7rem;
-      color: var(--accent2); letter-spacing: 3px; text-transform: uppercase;
-      background: rgba(224,92,42,0.1); border: 1px solid rgba(224,92,42,0.3);
-      padding: 0.3rem 1rem; border-radius: 3px; margin-bottom: 1.5rem;
-    }
-    h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3.5rem, 8vw, 7rem); line-height: 0.95; letter-spacing: 2px; margin-bottom: 1.2rem; }
+    .hero { padding: 4rem 2rem 3rem; text-align: center; }
+    h1 { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; letter-spacing: 2px; margin-bottom: 1rem; }
     h1 span { color: var(--accent); }
-    .hero-sub { color: var(--muted); font-size: 1rem; max-width: 540px; margin: 0 auto 3rem; line-height: 1.7; }
+    .hero-sub { color: var(--muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 2rem; }
 
-    .policy-strip { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-bottom: 4rem; }
-    .pill { display: flex; align-items: center; gap: 0.5rem; background: var(--card); border: 1px solid var(--border); padding: 0.55rem 1.1rem; border-radius: 999px; font-size: 0.82rem; font-weight: 500; }
-    .pill.green { border-color: rgba(34,197,94,0.4); color: var(--green); }
-    .pill.yellow { border-color: rgba(245,197,24,0.4); color: var(--accent); }
-    .pill.red { border-color: rgba(239,68,68,0.4); color: var(--red); }
+    .section-label { font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 4px; color: var(--muted); text-transform: uppercase; text-align: center; margin-bottom: 2rem; }
 
-    .section-label { font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 4px; color: var(--muted); text-transform: uppercase; text-align: center; margin-bottom: 2.5rem; }
-
-    .products { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; max-width: 1000px; margin: 0 auto 6rem; padding: 0 2rem; }
-    .product-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: transform 0.25s, border-color 0.25s; }
-    .product-card:hover { transform: translateY(-4px); border-color: var(--accent); }
-    .product-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: flex; align-items: center; justify-content: center; font-size: 4.5rem; background: linear-gradient(135deg, #1c1c1c, #252525); }
-    .product-body { padding: 1.2rem; }
-    .product-name { font-weight: 700; font-size: 1rem; margin-bottom: 0.4rem; }
-    .product-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.6; margin-bottom: 1rem; }
+    .products { display: flex; flex-direction: column; gap: 1.5rem; padding: 0 1.5rem 4rem; max-width: 600px; margin: 0 auto; }
+    .product-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    .product-img { width: 100%; height: 180px; display: flex; align-items: center; justify-content: center; font-size: 4rem; background: linear-gradient(135deg, #1c1c1c, #252525); }
+    .product-body { padding: 1.5rem; }
+    .product-name { font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem; }
+    .product-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.6; margin-bottom: 1.2rem; }
     .product-footer { display: flex; align-items: center; justify-content: space-between; }
-    .price { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; color: var(--accent); letter-spacing: 1px; }
-    .price sub { font-family: 'DM Sans', sans-serif; font-size: 0.65rem; color: var(--muted); font-weight: 400; vertical-align: baseline; }
+    .price { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--accent); }
     
-    /* Tombol Beli */
     .btn-buy {
-      background: var(--accent); color: #000; border: none; padding: 0.7rem 1.2rem;
-      border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 0.82rem;
-      font-weight: 700; cursor: pointer; letter-spacing: 0.5px; transition: background 0.2s, transform 0.1s;
+      background: var(--accent); color: #000; border: none; padding: 0.8rem 1.2rem;
+      border-radius: 6px; font-weight: 700; cursor: pointer; letter-spacing: 0.5px;
     }
-    .btn-buy:active { transform: scale(0.95); }
-    .btn-buy:hover { background: #f7d040; }
 
-    .how { max-width: 860px; margin: 0 auto 6rem; padding: 0 2rem; }
-    .steps { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
-    .step { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.4rem; position: relative; }
-    .step-num { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: var(--border); line-height: 1; margin-bottom: 0.7rem; }
-    .step-icon { font-size: 1.6rem; margin-bottom: 0.5rem; }
-    .step-title { font-weight: 700; margin-bottom: 0.3rem; font-size: 0.9rem; }
-    .step-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.6; }
-    .step.highlight { border-color: var(--accent); }
-    .step.highlight .step-num { color: rgba(245,197,24,0.15); }
-
-    /* Modal Backdrop FIX Z-INDEX: Naik jadi 9999 agar super aman menimpa apapun */
-    .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9999; backdrop-filter: blur(6px); align-items: center; justify-content: center; padding: 1rem; }
+    /* Modal Styling */
+    .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9999; align-items: center; justify-content: center; padding: 1rem; }
     .modal-backdrop.open { display: flex; }
-    .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; max-width: 480px; width: 100%; overflow: hidden; animation: slideUp 0.3s ease; }
-    @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-    .modal-header { background: var(--card); border-bottom: 1px solid var(--border); padding: 1.2rem 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+    .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 450px; max-height: 90vh; overflow-y: auto; }
+    .modal-header { background: var(--card); border-bottom: 1px solid var(--border); padding: 1.2rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; }
     .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 2px; }
-    .modal-close { background: none; border: none; color: var(--muted); font-size: 1.3rem; cursor: pointer; line-height: 1; transition: color 0.2s; }
-    .modal-close:hover { color: var(--text); }
+    .modal-close { background: none; border: none; color: var(--muted); font-size: 1.3rem; cursor: pointer; }
     .modal-body { padding: 1.5rem; }
 
     .pay-step { display: none; }
     .pay-step.active { display: block; }
-    .order-summary { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.2rem; margin-bottom: 1.2rem; }
-    .order-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.88rem; padding: 0.35rem 0; }
+
+    .order-summary { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; margin-bottom: 1.2rem; }
+    .order-row { display: flex; justify-content: space-between; font-size: 0.9rem; padding: 0.3rem 0; }
     .order-row.total { border-top: 1px solid var(--border); margin-top: 0.5rem; padding-top: 0.7rem; font-weight: 700; font-size: 1rem; color: var(--accent); }
-    .info-box { background: rgba(245,197,24,0.07); border: 1px solid rgba(245,197,24,0.3); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.8rem; color: #d4a700; line-height: 1.6; margin-bottom: 1.2rem; }
+    
     .form-group { margin-bottom: 1rem; }
-    .form-label { display: block; font-size: 0.78rem; color: var(--muted); margin-bottom: 0.4rem; font-family: 'Space Mono', monospace; letter-spacing: 1px; }
-    .form-input { width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: 7px; padding: 0.7rem 1rem; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.9rem; outline: none; transition: border-color 0.2s; }
+    .form-label { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 0.4rem; font-family: 'Space Mono', monospace; }
+    .form-input { width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: 7px; padding: 0.8rem; color: var(--text); outline: none; }
     .form-input:focus { border-color: var(--accent); }
     
-    .btn-full { width: 100%; background: var(--accent); color: #000; border: none; padding: 1rem; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 700; cursor: pointer; letter-spacing: 0.5px; transition: background 0.2s; }
-    .btn-full:active { transform: scale(0.98); }
-    .btn-full.secondary { background: var(--card); color: var(--muted); border: 1px solid var(--border); margin-top: 0.6rem; }
+    .btn-full { width: 100%; background: var(--accent); color: #000; border: none; padding: 1rem; border-radius: 8px; font-weight: 700; cursor: pointer; }
+    .btn-full.secondary { background: var(--card); color: var(--muted); border: 1px solid var(--border); margin-top: 0.5rem; }
 
-    .qr-wrapper { display: flex; flex-direction: column; align-items: center; gap: 1rem; margin-bottom: 1.2rem; }
-    .qr-frame { width: 200px; height: 200px; background: white; border-radius: 12px; padding: 12px; position: relative; box-shadow: 0 0 0 3px var(--accent), 0 0 40px rgba(245,197,24,0.25); }
+    .qr-wrapper { text-align: center; margin-bottom: 1.2rem; }
+    .qr-frame { width: 180px; height: 180px; background: white; border-radius: 12px; padding: 10px; margin: 0 auto 1rem; border: 3px solid var(--accent); }
     .qr-frame svg { width: 100%; height: 100%; }
-    .qr-label { font-family: 'Space Mono', monospace; font-size: 0.72rem; color: var(--muted); text-align: center; letter-spacing: 1px; }
-    .amount-due { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; color: var(--accent); letter-spacing: 2px; text-align: center; }
-    .bank-info { background: var(--card); border: 1px solid var(--border); border-radius: 9px; padding: 1rem; font-size: 0.82rem; margin-bottom: 1.2rem; }
-    .bank-row { display: flex; justify-content: space-between; padding: 0.3rem 0; color: var(--muted); }
-    .bank-row span:last-child { color: var(--text); font-family: 'Space Mono', monospace; font-size: 0.78rem; }
-    .countdown-wrap { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.3); border-radius: 8px; padding: 0.7rem 1rem; display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.2rem; }
-    .countdown-icon { font-size: 1.2rem; }
-    .countdown-text { font-size: 0.8rem; color: var(--red); line-height: 1.5; }
-    #timer { font-family: 'Space Mono', monospace; font-size: 1.1rem; font-weight: 700; }
-
-    .upload-area { border: 2px dashed var(--border); border-radius: 10px; padding: 2rem; text-align: center; cursor: pointer; transition: border-color 0.2s; margin-bottom: 1.2rem; position: relative; }
-    .upload-area:hover { border-color: var(--accent); }
-    .upload-area input[type=file] { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
-    .upload-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
-    .upload-text { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
-    .upload-preview { display: none; margin: 0.8rem 0; background: var(--card); border: 1px solid var(--green); border-radius: 8px; padding: 0.7rem 1rem; font-size: 0.82rem; color: var(--green); }
-    .warning-box { background: rgba(239,68,68,0.07); border: 1px solid rgba(239,68,68,0.3); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.78rem; color: #f87171; line-height: 1.6; margin-bottom: 1.2rem; }
+    .amount-due { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; color: var(--accent); }
     
-    .verify-anim { display: flex; flex-direction: column; align-items: center; gap: 1rem; padding: 1.5rem 0; text-align: center; }
-    .spinner { width: 60px; height: 60px; border: 4px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.9s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .verify-status { font-size: 0.85rem; color: var(--muted); margin-top: 0.3rem; }
-    .success-wrap { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 1rem 0; }
-    .success-icon { font-size: 4rem; margin-bottom: 1rem; }
-    .success-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 2px; color: var(--green); margin-bottom: 0.5rem; }
-    .success-sub { font-size: 0.85rem; color: var(--muted); line-height: 1.7; max-width: 320px; }
-    .order-code { font-family: 'Space Mono', monospace; font-size: 0.78rem; background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 0.5rem 1rem; margin-top: 1rem; color: var(--accent); letter-spacing: 2px; }
+    .upload-area { border: 2px dashed var(--border); border-radius: 10px; padding: 2rem; text-align: center; position: relative; margin-bottom: 1.2rem; }
+    .upload-area input[type=file] { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; }
+    .upload-preview { display: none; margin-bottom: 1rem; color: var(--green); font-size: 0.85rem; text-align: center; }
 
-    footer { border-top: 1px solid var(--border); padding: 2rem 2.5rem; text-align: center; font-size: 0.78rem; color: var(--muted); line-height: 2; position: relative; z-index: 10; }
+    .verify-status { text-align: center; font-size: 0.9rem; color: var(--muted); margin: 2rem 0; }
+    .success-wrap { text-align: center; padding: 2rem 0; }
+    .success-icon { font-size: 4rem; margin-bottom: 1rem; }
+    .order-code { background: var(--card); border: 1px solid var(--border); padding: 0.5rem; margin-top: 1rem; color: var(--accent); font-family: 'Space Mono', monospace; }
+
     .pay-progress { display: flex; gap: 4px; margin-bottom: 1.5rem; }
-    .pay-progress span { flex: 1; height: 3px; border-radius: 99px; background: var(--border); transition: background 0.3s; }
+    .pay-progress span { flex: 1; height: 3px; border-radius: 99px; background: var(--border); }
     .pay-progress span.done { background: var(--accent); }
     .pay-progress span.active { background: var(--accent); opacity: 0.5; }
   </style>
 </head>
 <body>
 
-<div class="main-wrapper">
   <header>
-    <div class="logo">TOKO PREMIUM</div>
-    <div class="badge-secure">PEMBAYARAN TERVERIFIKASI</div>
+    <div class="logo">MaddazXD_STORE</div>
+    <div class="badge-secure">TERVERIFIKASI</div>
   </header>
 
   <section class="hero">
-    <div class="hero-tag">⚡ SISTEM BAYAR DULU, KIRIM KEMUDIAN</div>
-    <h1>PRODUK <span>DIKIRIM</span> SETELAH BAYAR <span>LUNAS</span></h1>
-    <p class="hero-sub">Kami menggunakan sistem verifikasi pembayaran ketat via QR Code / QRIS. Pesanan hanya diproses setelah pembayaran dikonfirmasi.</p>
+    <h1>SISTEM BAYAR <span>KETAT</span></h1>
+    <p class="hero-sub">Produk akan langsung diproses setelah sistem memvalidasi bukti pembayaran.</p>
   </section>
 
-  <div class="section-label">— PILIH PRODUK —</div>
+  <div class="section-label">— PILIH APLIKASI —</div>
   <div class="products">
+    
     <div class="product-card">
-      <div class="product-img">🎧</div>
+      <div class="product-img">📱</div>
       <div class="product-body">
-        <div class="product-name">Headphone Pro X1</div>
-        <div class="product-desc">Audio premium dengan noise cancelling aktif. Baterai 40 jam.</div>
+        <div class="product-name">Aplikasi Mod VIP V1.0</div>
+        <div class="product-desc">Bypass keamanan, unlock semua fitur VIP. Akses permanen tanpa iklan.</div>
         <div class="product-footer">
-          <div class="price">Rp 450K</div>
-          <button class="btn-buy" onclick="openModal({name:'Headphone Pro X1', price:450000})">BELI SEKARANG</button>
+          <div class="price">Rp 45.000</div>
+          <button class="btn-buy" data-name="Aplikasi Mod VIP V1.0" data-price="45000" onclick="bukaModal(this)">BELI SEKARANG</button>
         </div>
       </div>
     </div>
 
     <div class="product-card">
-      <div class="product-img">⌚</div>
+      <div class="product-img">⚡</div>
       <div class="product-body">
-        <div class="product-name">Smartwatch Z Series</div>
-        <div class="product-desc">Monitor detak jantung, GPS, tahan air IPX7. Layar AMOLED.</div>
+        <div class="product-name">Script Cheat Engine Pro</div>
+        <div class="product-desc">Injeksi memori secara aman. Termasuk panduan instalasi lengkap.</div>
         <div class="product-footer">
-          <div class="price">Rp 850K</div>
-          <button class="btn-buy" onclick="openModal({name:'Smartwatch Z Series', price:850000})">BELI SEKARANG</button>
+          <div class="price">Rp 80.000</div>
+          <button class="btn-buy" data-name="Script Cheat Engine Pro" data-price="80000" onclick="bukaModal(this)">BELI SEKARANG</button>
         </div>
       </div>
     </div>
+
   </div>
-</div>
 
-<footer>
-  <strong>TOKO PREMIUM</strong> — Sistem Pembayaran Terverifikasi<br>
-  ⚠️ Tidak menerima COD · Hubungi CS: <strong>0812-XXXX-XXXX</strong>
-</footer>
-
-<div class="modal-backdrop" id="modalBackdrop" onclick="handleBackdropClick(event)">
-  <div class="modal" id="modal" onclick="event.stopPropagation()">
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal">
     <div class="modal-header">
       <div class="modal-title" id="modalTitle">DETAIL PESANAN</div>
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
     <div class="modal-body">
+
       <div class="pay-progress" id="payProgress">
         <span></span><span></span><span></span><span></span><span></span>
       </div>
@@ -240,73 +158,51 @@
           <div class="order-row total"><span>Total Bayar</span><span id="s1Total">—</span></div>
         </div>
         <div class="form-group">
-          <label class="form-label">NAMA LENGKAP PENERIMA</label>
+          <label class="form-label">USERNAME / NAMA</label>
           <input class="form-input" id="inputNama" type="text" placeholder="Masukkan nama..."/>
         </div>
         <div class="form-group">
-          <label class="form-label">NOMOR TELEPON / WA</label>
-          <input class="form-input" id="inputPhone" type="tel" placeholder="08xxxxxxxxxx"/>
+          <label class="form-label">NOMOR WHATSAPP</label>
+          <input class="form-input" id="inputPhone" type="number" placeholder="08xxxxxxxxxx"/>
         </div>
-        <button class="btn-full" onclick="goToStep(2)">LANJUT KE PEMBAYARAN →</button>
-        <button class="btn-full secondary" onclick="closeModal()">BATAL</button>
+        <button class="btn-full" onclick="goToStep(2)">LANJUT KE PEMBAYARAN</button>
       </div>
 
       <div class="pay-step" id="step2">
         <div class="qr-wrapper">
-          <div class="qr-label">SCAN QRIS DI BAWAH INI</div>
           <div class="qr-frame">
-            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-              <rect width="100" height="100" fill="white"/>
-              <rect x="5" y="5" width="30" height="30" rx="3" fill="black"/><rect x="8" y="8" width="24" height="24" rx="2" fill="white"/><rect x="11" y="11" width="18" height="18" rx="1" fill="black"/>
-              <rect x="65" y="5" width="30" height="30" rx="3" fill="black"/><rect x="68" y="8" width="24" height="24" rx="2" fill="white"/><rect x="71" y="11" width="18" height="18" rx="1" fill="black"/>
-              <rect x="5" y="65" width="30" height="30" rx="3" fill="black"/><rect x="8" y="68" width="24" height="24" rx="2" fill="white"/><rect x="11" y="71" width="18" height="18" rx="1" fill="black"/>
-            </svg>
+            <svg viewBox="0 0 100 100"><rect width="100" height="100" fill="white"/><rect x="10" y="10" width="30" height="30" fill="black"/><rect x="60" y="10" width="30" height="30" fill="black"/><rect x="10" y="60" width="30" height="30" fill="black"/><rect x="45" y="45" width="45" height="45" fill="black"/></svg>
           </div>
           <div class="amount-due" id="s2Total">Rp 0</div>
+          <p style="color:var(--muted); font-size:0.8rem; margin-top:0.5rem;">Kode Unik: <strong id="s2Unik" style="color:var(--accent);">000</strong></p>
         </div>
-        <div class="bank-info">
-          <div class="bank-row"><span>Kode Unik</span><span id="s2Unik">—</span></div>
-        </div>
-        <div class="countdown-wrap">
-          <div class="countdown-icon">⏰</div>
-          <div class="countdown-text">Waktu Bayar: <span id="timer">15:00</span></div>
-        </div>
-        <button class="btn-full" onclick="goToStep(3)">SUDAH BAYAR → UPLOAD BUKTI</button>
-        <button class="btn-full secondary" onclick="goToStep(1)">← KEMBALI</button>
+        <button class="btn-full" onclick="goToStep(3)">SAYA SUDAH BAYAR</button>
+        <button class="btn-full secondary" onclick="goToStep(1)">KEMBALI</button>
       </div>
 
       <div class="pay-step" id="step3">
-        <div class="warning-box">
-          🚫 <strong>PERINGATAN KERAS:</strong> Sistem verifikasi server aktif. Bukti palsu otomatis terblokir.
-        </div>
-        <div class="upload-area" id="uploadArea">
+        <div class="upload-area">
           <input type="file" accept="image/*" id="fileInput" onchange="handleFile(event)"/>
-          <div class="upload-icon">📎</div>
-          <div class="upload-text">Tap untuk upload screenshot bukti transfer<br>Maks 5MB</div>
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">📎</div>
+          <div style="font-size: 0.8rem; color:var(--muted);">Tap untuk upload bukti transfer (Gambar)</div>
         </div>
-        <div class="upload-preview" id="uploadPreview">✅ File siap: <span id="fileName"></span></div>
+        <div class="upload-preview" id="uploadPreview">✅ File Terpilih: <span id="fileName"></span></div>
         <button class="btn-full" onclick="submitProof()">KIRIM BUKTI PEMBAYARAN</button>
-        <button class="btn-full secondary" onclick="goToStep(2)">← KEMBALI</button>
+        <button class="btn-full secondary" onclick="goToStep(2)">KEMBALI</button>
       </div>
 
       <div class="pay-step" id="step4">
-        <div class="verify-anim">
-          <div class="spinner"></div>
-          <div>
-            <div style="font-weight:700; margin-bottom:0.3rem;">Validasi Sistem...</div>
-            <div class="verify-status" id="verifyStatus">Menghubungi Server Vercel...</div>
-          </div>
-        </div>
+        <div class="verify-status" id="verifyStatus">Mengenkripsi dan mengirim file ke Server...</div>
       </div>
 
       <div class="pay-step" id="step5">
         <div class="success-wrap">
           <div class="success-icon">✅</div>
-          <div class="success-title">BUKTI DITERIMA!</div>
-          <div class="success-sub">Sistem telah memvalidasi bukti kamu. Pesanan segera dikerjakan.</div>
-          <div class="order-code" id="orderCode">ORDER-XXXXXXXX</div>
+          <h2 style="color:var(--green); margin-bottom:0.5rem;">BERHASIL!</h2>
+          <p style="font-size:0.85rem; color:var(--muted);">Bukti divalidasi. Produk segera dikirim.</p>
+          <div class="order-code" id="orderCode">ORDER-XXX</div>
         </div>
-        <button class="btn-full" style="margin-top:1.5rem;" onclick="closeModal()">SELESAI</button>
+        <button class="btn-full" onclick="closeModal()">SELESAI</button>
       </div>
 
     </div>
@@ -314,17 +210,127 @@
 </div>
 
 <script>
-  let currentProduct = null;
   let timerInterval = null;
-  let timeLeft = 900; 
 
-  function formatRp(n) { return 'Rp ' + n.toLocaleString('id-ID'); }
+  function formatRp(angka) {
+    return 'Rp ' + angka.toLocaleString('id-ID');
+  }
 
-  function openModal(product) {
-    currentProduct = product;
-    const total = product.price;
-    currentProduct.unik = Math.floor(Math.random() * 900) + 100;
-    currentProduct.totalWithUnik = total + currentProduct.unik;
+  // ANTI ERROR: Mengambil data dari atribut tombol
+  function bukaModal(btn) {
+    const namaProduk = btn.getAttribute('data-name');
+    const hargaProduk = parseInt(btn.getAttribute('data-price'));
+    
+    const kodeUnik = Math.floor(Math.random() * 900) + 100;
+    const totalDenganUnik = hargaProduk + kodeUnik;
 
-    document.getElementById('s1ProductName').textContent = product.name;
-  
+    document.getElementById('s1ProductName').textContent = namaProduk;
+    document.getElementById('s1Price').textContent = formatRp(hargaProduk);
+    document.getElementById('s1Total').textContent = formatRp(hargaProduk);
+    document.getElementById('s2Total').textContent = formatRp(totalDenganUnik);
+    document.getElementById('s2Unik').textContent = kodeUnik;
+
+    document.getElementById('inputNama').value = '';
+    document.getElementById('inputPhone').value = '';
+    document.getElementById('uploadPreview').style.display = 'none';
+    document.getElementById('fileInput').value = '';
+
+    goToStep(1, true);
+    document.getElementById('modalBackdrop').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('modalBackdrop').classList.remove('open');
+  }
+
+  // ANTI ERROR: Menggunakan for loop klasik karena Webview lama tidak support forEach
+  function updateProgress(step) {
+    const spans = document.querySelectorAll('.pay-progress span');
+    for (let i = 0; i < spans.length; i++) {
+      spans[i].className = '';
+      if (i < step - 1) spans[i].classList.add('done');
+      else if (i === step - 1) spans[i].classList.add('active');
+    }
+  }
+
+  function goToStep(n, silent) {
+    if (!silent && n === 2) {
+      const nama = document.getElementById('inputNama').value.trim();
+      const phone = document.getElementById('inputPhone').value.trim();
+      if (!nama || !phone) {
+        alert('⚠️ Harap lengkapi Nama dan Nomor WA!');
+        return;
+      }
+    }
+
+    const steps = document.querySelectorAll('.pay-step');
+    for (let i = 0; i < steps.length; i++) {
+      steps[i].classList.remove('active');
+    }
+
+    document.getElementById('step' + n).classList.add('active');
+    updateProgress(n);
+  }
+
+  function handleFile(event) {
+    const file = event.target.files[0];
+    if (file) {
+      document.getElementById('fileName').textContent = file.name;
+      document.getElementById('uploadPreview').style.display = 'block';
+    }
+  }
+
+  function toBase64(file) {
+    return new Promise(function(resolve, reject) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = function() { resolve(reader.result); };
+      reader.onerror = function(error) { reject(error); };
+    });
+  }
+
+  async function submitProof() {
+    const fileInput = document.getElementById('fileInput').files[0];
+    const nama = document.getElementById('inputNama').value;
+    const phone = document.getElementById('inputPhone').value;
+
+    if (!fileInput) {
+      alert('⚠️ Upload bukti transfer terlebih dahulu!');
+      return;
+    }
+
+    goToStep(4);
+    const statusText = document.getElementById('verifyStatus');
+    statusText.textContent = "Menghubungkan ke Server Vercel...";
+
+    try {
+      const base64Image = await toBase64(fileInput);
+      
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: nama,
+          phone: phone,
+          imagePayload: base64Image
+        })
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        document.getElementById('orderCode').textContent = result.data.order_id;
+        goToStep(5);
+      } else {
+        alert("🚫 DITOLAK: " + result.error);
+        goToStep(3);
+      }
+    } catch (error) {
+      alert("Sistem Keamanan Aktif: Koneksi ke server gagal. Harap jalankan dari Vercel/Replit, bukan Acode.");
+      statusText.textContent = "Akses Ditolak. Harus terhubung ke backend.";
+      setTimeout(function() { goToStep(3); }, 2000);
+    }
+  }
+</script>
+</body>
+</html>
