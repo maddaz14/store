@@ -18,7 +18,7 @@
       --text: #f0f0f0;
       --muted: #888;
     }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     html { scroll-behavior: smooth; }
 
     body {
@@ -27,14 +27,22 @@
       font-family: 'DM Sans', sans-serif;
       min-height: 100vh;
       overflow-x: hidden;
+      position: relative;
     }
 
+    /* FIX KOREKSI: z-index diturunkan jadi 0 agar tidak memblokir klik di HP */
     body::before {
       content: '';
       position: fixed; inset: 0;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none; z-index: 999;
+      pointer-events: none; z-index: 0;
       opacity: 0.35;
+    }
+
+    /* Bungkus utama dinaikkan z-index-nya agar selalu di atas efek noise */
+    .main-wrapper {
+      position: relative;
+      z-index: 10; 
     }
 
     header {
@@ -45,571 +53,182 @@
       background: rgba(10,10,10,0.92);
       backdrop-filter: blur(12px);
     }
-    .logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.8rem;
-      letter-spacing: 3px;
-      color: var(--accent);
-    }
+    .logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 3px; color: var(--accent); }
     .badge-secure {
       display: flex; align-items: center; gap: 0.4rem;
-      background: rgba(34,197,94,0.12);
-      border: 1px solid rgba(34,197,94,0.35);
-      color: var(--green);
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      padding: 0.35rem 0.8rem;
-      border-radius: 999px;
-      letter-spacing: 1px;
+      background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.35);
+      color: var(--green); font-family: 'Space Mono', monospace; font-size: 0.7rem;
+      padding: 0.35rem 0.8rem; border-radius: 999px; letter-spacing: 1px;
     }
-    .badge-secure::before { content: '🔒'; font-size: 0.75rem; }
 
-    .hero {
-      padding: 5rem 2.5rem 4rem;
-      max-width: 900px; margin: 0 auto;
-      text-align: center;
-      position: relative;
-    }
+    .hero { padding: 5rem 2.5rem 4rem; max-width: 900px; margin: 0 auto; text-align: center; }
     .hero-tag {
-      display: inline-block;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--accent2);
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      background: rgba(224,92,42,0.1);
-      border: 1px solid rgba(224,92,42,0.3);
-      padding: 0.3rem 1rem;
-      border-radius: 3px;
-      margin-bottom: 1.5rem;
+      display: inline-block; font-family: 'Space Mono', monospace; font-size: 0.7rem;
+      color: var(--accent2); letter-spacing: 3px; text-transform: uppercase;
+      background: rgba(224,92,42,0.1); border: 1px solid rgba(224,92,42,0.3);
+      padding: 0.3rem 1rem; border-radius: 3px; margin-bottom: 1.5rem;
     }
-    h1 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(3.5rem, 8vw, 7rem);
-      line-height: 0.95;
-      letter-spacing: 2px;
-      color: var(--text);
-      margin-bottom: 1.2rem;
-    }
+    h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3.5rem, 8vw, 7rem); line-height: 0.95; letter-spacing: 2px; margin-bottom: 1.2rem; }
     h1 span { color: var(--accent); }
-    .hero-sub {
-      color: var(--muted);
-      font-size: 1rem;
-      max-width: 540px;
-      margin: 0 auto 3rem;
-      line-height: 1.7;
-    }
+    .hero-sub { color: var(--muted); font-size: 1rem; max-width: 540px; margin: 0 auto 3rem; line-height: 1.7; }
 
-    .policy-strip {
-      display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem;
-      margin-bottom: 4rem;
-    }
-    .pill {
-      display: flex; align-items: center; gap: 0.5rem;
-      background: var(--card);
-      border: 1px solid var(--border);
-      padding: 0.55rem 1.1rem;
-      border-radius: 999px;
-      font-size: 0.82rem;
-      font-weight: 500;
-    }
+    .policy-strip { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-bottom: 4rem; }
+    .pill { display: flex; align-items: center; gap: 0.5rem; background: var(--card); border: 1px solid var(--border); padding: 0.55rem 1.1rem; border-radius: 999px; font-size: 0.82rem; font-weight: 500; }
     .pill.green { border-color: rgba(34,197,94,0.4); color: var(--green); }
     .pill.yellow { border-color: rgba(245,197,24,0.4); color: var(--accent); }
     .pill.red { border-color: rgba(239,68,68,0.4); color: var(--red); }
 
-    .section-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 4px;
-      color: var(--muted);
-      text-transform: uppercase;
-      text-align: center;
-      margin-bottom: 2.5rem;
-    }
+    .section-label { font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 4px; color: var(--muted); text-transform: uppercase; text-align: center; margin-bottom: 2.5rem; }
 
-    .products {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1.5rem;
-      max-width: 1000px;
-      margin: 0 auto 6rem;
-      padding: 0 2rem;
-    }
-
-    .product-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-      transition: transform 0.25s, border-color 0.25s;
-      cursor: pointer;
-    }
-    .product-card:hover {
-      transform: translateY(-4px);
-      border-color: var(--accent);
-    }
-    .product-img {
-      width: 100%; aspect-ratio: 4/3;
-      object-fit: cover;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 4.5rem;
-      background: linear-gradient(135deg, #1c1c1c, #252525);
-    }
+    .products { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; max-width: 1000px; margin: 0 auto 6rem; padding: 0 2rem; }
+    .product-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: transform 0.25s, border-color 0.25s; }
+    .product-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+    .product-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: flex; align-items: center; justify-content: center; font-size: 4.5rem; background: linear-gradient(135deg, #1c1c1c, #252525); }
     .product-body { padding: 1.2rem; }
     .product-name { font-weight: 700; font-size: 1rem; margin-bottom: 0.4rem; }
     .product-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.6; margin-bottom: 1rem; }
     .product-footer { display: flex; align-items: center; justify-content: space-between; }
-    .price {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.6rem;
-      color: var(--accent);
-      letter-spacing: 1px;
-    }
-    .price sub {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.65rem;
-      color: var(--muted);
-      font-weight: 400;
-      vertical-align: baseline;
-    }
+    .price { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; color: var(--accent); letter-spacing: 1px; }
+    .price sub { font-family: 'DM Sans', sans-serif; font-size: 0.65rem; color: var(--muted); font-weight: 400; vertical-align: baseline; }
+    
+    /* Tombol Beli */
     .btn-buy {
-      background: var(--accent);
-      color: #000;
-      border: none;
-      padding: 0.55rem 1.2rem;
-      border-radius: 6px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.82rem;
-      font-weight: 700;
-      cursor: pointer;
-      letter-spacing: 0.5px;
-      transition: background 0.2s, transform 0.1s;
+      background: var(--accent); color: #000; border: none; padding: 0.7rem 1.2rem;
+      border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 0.82rem;
+      font-weight: 700; cursor: pointer; letter-spacing: 0.5px; transition: background 0.2s, transform 0.1s;
     }
-    .btn-buy:active { transform: scale(0.97); }
+    .btn-buy:active { transform: scale(0.95); }
     .btn-buy:hover { background: #f7d040; }
 
     .how { max-width: 860px; margin: 0 auto 6rem; padding: 0 2rem; }
-    .steps {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2.5rem;
-    }
-    .step {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 1.4rem;
-      position: relative;
-    }
-    .step-num {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 3rem;
-      color: var(--border);
-      line-height: 1;
-      margin-bottom: 0.7rem;
-    }
+    .steps { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
+    .step { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.4rem; position: relative; }
+    .step-num { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: var(--border); line-height: 1; margin-bottom: 0.7rem; }
     .step-icon { font-size: 1.6rem; margin-bottom: 0.5rem; }
     .step-title { font-weight: 700; margin-bottom: 0.3rem; font-size: 0.9rem; }
     .step-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.6; }
     .step.highlight { border-color: var(--accent); }
     .step.highlight .step-num { color: rgba(245,197,24,0.15); }
 
-    .modal-backdrop {
-      display: none;
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.85);
-      z-index: 500;
-      backdrop-filter: blur(6px);
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-    }
+    /* Modal Backdrop FIX Z-INDEX: Naik jadi 9999 agar super aman menimpa apapun */
+    .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9999; backdrop-filter: blur(6px); align-items: center; justify-content: center; padding: 1rem; }
     .modal-backdrop.open { display: flex; }
+    .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; max-width: 480px; width: 100%; overflow: hidden; animation: slideUp 0.3s ease; }
+    @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-    .modal {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      max-width: 480px; width: 100%;
-      overflow: hidden;
-      animation: slideUp 0.3s ease;
-    }
-    @keyframes slideUp {
-      from { transform: translateY(30px); opacity: 0; }
-      to   { transform: translateY(0);    opacity: 1; }
-    }
-
-    .modal-header {
-      background: var(--card);
-      border-bottom: 1px solid var(--border);
-      padding: 1.2rem 1.5rem;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .modal-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.3rem;
-      letter-spacing: 2px;
-    }
-    .modal-close {
-      background: none; border: none; color: var(--muted);
-      font-size: 1.3rem; cursor: pointer; line-height: 1;
-      transition: color 0.2s;
-    }
+    .modal-header { background: var(--card); border-bottom: 1px solid var(--border); padding: 1.2rem 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+    .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 2px; }
+    .modal-close { background: none; border: none; color: var(--muted); font-size: 1.3rem; cursor: pointer; line-height: 1; transition: color 0.2s; }
     .modal-close:hover { color: var(--text); }
     .modal-body { padding: 1.5rem; }
 
     .pay-step { display: none; }
     .pay-step.active { display: block; }
-
-    .order-summary {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 1rem 1.2rem;
-      margin-bottom: 1.2rem;
-    }
-    .order-row {
-      display: flex; justify-content: space-between; align-items: center;
-      font-size: 0.88rem; padding: 0.35rem 0;
-    }
-    .order-row.total {
-      border-top: 1px solid var(--border);
-      margin-top: 0.5rem; padding-top: 0.7rem;
-      font-weight: 700; font-size: 1rem;
-      color: var(--accent);
-    }
-    .info-box {
-      background: rgba(245,197,24,0.07);
-      border: 1px solid rgba(245,197,24,0.3);
-      border-radius: 8px;
-      padding: 0.9rem 1rem;
-      font-size: 0.8rem;
-      color: #d4a700;
-      line-height: 1.6;
-      margin-bottom: 1.2rem;
-    }
-    .info-box strong { color: var(--accent); }
-
+    .order-summary { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.2rem; margin-bottom: 1.2rem; }
+    .order-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.88rem; padding: 0.35rem 0; }
+    .order-row.total { border-top: 1px solid var(--border); margin-top: 0.5rem; padding-top: 0.7rem; font-weight: 700; font-size: 1rem; color: var(--accent); }
+    .info-box { background: rgba(245,197,24,0.07); border: 1px solid rgba(245,197,24,0.3); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.8rem; color: #d4a700; line-height: 1.6; margin-bottom: 1.2rem; }
     .form-group { margin-bottom: 1rem; }
-    .form-label {
-      display: block; font-size: 0.78rem;
-      color: var(--muted); margin-bottom: 0.4rem;
-      font-family: 'Space Mono', monospace; letter-spacing: 1px;
-    }
-    .form-input {
-      width: 100%;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 7px;
-      padding: 0.7rem 1rem;
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.9rem;
-      outline: none;
-      transition: border-color 0.2s;
-    }
+    .form-label { display: block; font-size: 0.78rem; color: var(--muted); margin-bottom: 0.4rem; font-family: 'Space Mono', monospace; letter-spacing: 1px; }
+    .form-input { width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: 7px; padding: 0.7rem 1rem; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.9rem; outline: none; transition: border-color 0.2s; }
     .form-input:focus { border-color: var(--accent); }
+    
+    .btn-full { width: 100%; background: var(--accent); color: #000; border: none; padding: 1rem; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 700; cursor: pointer; letter-spacing: 0.5px; transition: background 0.2s; }
+    .btn-full:active { transform: scale(0.98); }
+    .btn-full.secondary { background: var(--card); color: var(--muted); border: 1px solid var(--border); margin-top: 0.6rem; }
 
-    .btn-full {
-      width: 100%;
-      background: var(--accent);
-      color: #000;
-      border: none;
-      padding: 0.85rem;
-      border-radius: 8px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.95rem;
-      font-weight: 700;
-      cursor: pointer;
-      letter-spacing: 0.5px;
-      transition: background 0.2s;
-    }
-    .btn-full:hover { background: #f7d040; }
-    .btn-full.secondary {
-      background: var(--card);
-      color: var(--muted);
-      border: 1px solid var(--border);
-      margin-top: 0.6rem;
-    }
-    .btn-full.secondary:hover { border-color: var(--text); color: var(--text); background: var(--card); }
-
-    .qr-wrapper {
-      display: flex; flex-direction: column; align-items: center;
-      gap: 1rem; margin-bottom: 1.2rem;
-    }
-    .qr-frame {
-      width: 200px; height: 200px;
-      background: white;
-      border-radius: 12px;
-      padding: 12px;
-      position: relative;
-      box-shadow: 0 0 0 3px var(--accent), 0 0 40px rgba(245,197,24,0.25);
-    }
+    .qr-wrapper { display: flex; flex-direction: column; align-items: center; gap: 1rem; margin-bottom: 1.2rem; }
+    .qr-frame { width: 200px; height: 200px; background: white; border-radius: 12px; padding: 12px; position: relative; box-shadow: 0 0 0 3px var(--accent), 0 0 40px rgba(245,197,24,0.25); }
     .qr-frame svg { width: 100%; height: 100%; }
-
-    .qr-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.72rem;
-      color: var(--muted);
-      text-align: center;
-      letter-spacing: 1px;
-    }
-    .amount-due {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 2.2rem;
-      color: var(--accent);
-      letter-spacing: 2px;
-      text-align: center;
-    }
-    .bank-info {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 9px;
-      padding: 1rem;
-      font-size: 0.82rem;
-      margin-bottom: 1.2rem;
-    }
-    .bank-row {
-      display: flex; justify-content: space-between;
-      padding: 0.3rem 0; color: var(--muted);
-    }
-    .bank-row span:last-child {
-      color: var(--text); font-family: 'Space Mono', monospace;
-      font-size: 0.78rem;
-    }
-
-    .countdown-wrap {
-      background: rgba(239,68,68,0.08);
-      border: 1px solid rgba(239,68,68,0.3);
-      border-radius: 8px;
-      padding: 0.7rem 1rem;
-      display: flex; align-items: center; gap: 0.7rem;
-      margin-bottom: 1.2rem;
-    }
+    .qr-label { font-family: 'Space Mono', monospace; font-size: 0.72rem; color: var(--muted); text-align: center; letter-spacing: 1px; }
+    .amount-due { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; color: var(--accent); letter-spacing: 2px; text-align: center; }
+    .bank-info { background: var(--card); border: 1px solid var(--border); border-radius: 9px; padding: 1rem; font-size: 0.82rem; margin-bottom: 1.2rem; }
+    .bank-row { display: flex; justify-content: space-between; padding: 0.3rem 0; color: var(--muted); }
+    .bank-row span:last-child { color: var(--text); font-family: 'Space Mono', monospace; font-size: 0.78rem; }
+    .countdown-wrap { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.3); border-radius: 8px; padding: 0.7rem 1rem; display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.2rem; }
     .countdown-icon { font-size: 1.2rem; }
     .countdown-text { font-size: 0.8rem; color: var(--red); line-height: 1.5; }
-    #timer {
-      font-family: 'Space Mono', monospace;
-      font-size: 1.1rem;
-      font-weight: 700;
-    }
+    #timer { font-family: 'Space Mono', monospace; font-size: 1.1rem; font-weight: 700; }
 
-    .upload-area {
-      border: 2px dashed var(--border);
-      border-radius: 10px;
-      padding: 2rem;
-      text-align: center;
-      cursor: pointer;
-      transition: border-color 0.2s;
-      margin-bottom: 1.2rem;
-      position: relative;
-    }
+    .upload-area { border: 2px dashed var(--border); border-radius: 10px; padding: 2rem; text-align: center; cursor: pointer; transition: border-color 0.2s; margin-bottom: 1.2rem; position: relative; }
     .upload-area:hover { border-color: var(--accent); }
-    .upload-area input[type=file] {
-      position: absolute; inset: 0; opacity: 0; cursor: pointer;
-    }
+    .upload-area input[type=file] { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
     .upload-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
     .upload-text { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
-    .upload-preview {
-      display: none;
-      margin: 0.8rem 0;
-      background: var(--card);
-      border: 1px solid var(--green);
-      border-radius: 8px;
-      padding: 0.7rem 1rem;
-      font-size: 0.82rem;
-      color: var(--green);
-    }
-
-    .warning-box {
-      background: rgba(239,68,68,0.07);
-      border: 1px solid rgba(239,68,68,0.3);
-      border-radius: 8px;
-      padding: 0.9rem 1rem;
-      font-size: 0.78rem;
-      color: #f87171;
-      line-height: 1.6;
-      margin-bottom: 1.2rem;
-    }
-    .warning-box strong { color: var(--red); }
-
-    .verify-anim {
-      display: flex; flex-direction: column; align-items: center;
-      gap: 1rem; padding: 1.5rem 0;
-      text-align: center;
-    }
-    .spinner {
-      width: 60px; height: 60px;
-      border: 4px solid var(--border);
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: spin 0.9s linear infinite;
-    }
+    .upload-preview { display: none; margin: 0.8rem 0; background: var(--card); border: 1px solid var(--green); border-radius: 8px; padding: 0.7rem 1rem; font-size: 0.82rem; color: var(--green); }
+    .warning-box { background: rgba(239,68,68,0.07); border: 1px solid rgba(239,68,68,0.3); border-radius: 8px; padding: 0.9rem 1rem; font-size: 0.78rem; color: #f87171; line-height: 1.6; margin-bottom: 1.2rem; }
+    
+    .verify-anim { display: flex; flex-direction: column; align-items: center; gap: 1rem; padding: 1.5rem 0; text-align: center; }
+    .spinner { width: 60px; height: 60px; border: 4px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.9s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .verify-status { font-size: 0.85rem; color: var(--muted); margin-top: 0.3rem; }
-
-    .success-wrap {
-      display: flex; flex-direction: column; align-items: center;
-      text-align: center; padding: 1rem 0;
-    }
+    .success-wrap { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 1rem 0; }
     .success-icon { font-size: 4rem; margin-bottom: 1rem; }
-    .success-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.8rem; letter-spacing: 2px;
-      color: var(--green); margin-bottom: 0.5rem;
-    }
+    .success-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 2px; color: var(--green); margin-bottom: 0.5rem; }
     .success-sub { font-size: 0.85rem; color: var(--muted); line-height: 1.7; max-width: 320px; }
-    .order-code {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.78rem;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 0.5rem 1rem;
-      margin-top: 1rem;
-      color: var(--accent);
-      letter-spacing: 2px;
-    }
+    .order-code { font-family: 'Space Mono', monospace; font-size: 0.78rem; background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 0.5rem 1rem; margin-top: 1rem; color: var(--accent); letter-spacing: 2px; }
 
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 2rem 2.5rem;
-      text-align: center;
-      font-size: 0.78rem;
-      color: var(--muted);
-      line-height: 2;
-    }
-    footer strong { color: var(--text); }
-
+    footer { border-top: 1px solid var(--border); padding: 2rem 2.5rem; text-align: center; font-size: 0.78rem; color: var(--muted); line-height: 2; position: relative; z-index: 10; }
     .pay-progress { display: flex; gap: 4px; margin-bottom: 1.5rem; }
-    .pay-progress span {
-      flex: 1; height: 3px; border-radius: 99px;
-      background: var(--border); transition: background 0.3s;
-    }
+    .pay-progress span { flex: 1; height: 3px; border-radius: 99px; background: var(--border); transition: background 0.3s; }
     .pay-progress span.done { background: var(--accent); }
     .pay-progress span.active { background: var(--accent); opacity: 0.5; }
   </style>
 </head>
 <body>
 
-<header>
-  <div class="logo">TOKO PREMIUM</div>
-  <div class="badge-secure">PEMBAYARAN TERVERIFIKASI</div>
-</header>
+<div class="main-wrapper">
+  <header>
+    <div class="logo">TOKO PREMIUM</div>
+    <div class="badge-secure">PEMBAYARAN TERVERIFIKASI</div>
+  </header>
 
-<section class="hero">
-  <div class="hero-tag">⚡ SISTEM BAYAR DULU, KIRIM KEMUDIAN</div>
-  <h1>PRODUK <span>DIKIRIM</span> SETELAH BAYAR <span>LUNAS</span></h1>
-  <p class="hero-sub">
-    Kami menggunakan sistem verifikasi pembayaran ketat via QR Code / QRIS.
-    Pesanan hanya diproses setelah pembayaran dikonfirmasi secara manual oleh tim kami.
-    Tidak ada pengecualian.
-  </p>
-  <div class="policy-strip">
-    <div class="pill green">✅ Bayar Dulu</div>
-    <div class="pill green">✅ Verifikasi Manual</div>
-    <div class="pill yellow">⏱ Batas Waktu Bayar 15 Menit</div>
-    <div class="pill red">🚫 Tidak Bisa COD</div>
-    <div class="pill red">🚫 Tanpa Bukti = Batal</div>
-  </div>
-</section>
+  <section class="hero">
+    <div class="hero-tag">⚡ SISTEM BAYAR DULU, KIRIM KEMUDIAN</div>
+    <h1>PRODUK <span>DIKIRIM</span> SETELAH BAYAR <span>LUNAS</span></h1>
+    <p class="hero-sub">Kami menggunakan sistem verifikasi pembayaran ketat via QR Code / QRIS. Pesanan hanya diproses setelah pembayaran dikonfirmasi.</p>
+  </section>
 
-<div class="section-label">— PILIH PRODUK —</div>
-<div class="products">
-  <div class="product-card" onclick="openModal({name:'Headphone Pro X1', price:450000, emoji:'🎧'})">
-    <div class="product-img">🎧</div>
-    <div class="product-body">
-      <div class="product-name">Headphone Pro X1</div>
-      <div class="product-desc">Audio premium dengan noise cancelling aktif. Baterai 40 jam. Cocok untuk WFH & gaming.</div>
-      <div class="product-footer">
-        <div class="price">Rp 450K <sub>/ unit</sub></div>
-        <button class="btn-buy">BELI SEKARANG</button>
+  <div class="section-label">— PILIH PRODUK —</div>
+  <div class="products">
+    <div class="product-card">
+      <div class="product-img">🎧</div>
+      <div class="product-body">
+        <div class="product-name">Headphone Pro X1</div>
+        <div class="product-desc">Audio premium dengan noise cancelling aktif. Baterai 40 jam.</div>
+        <div class="product-footer">
+          <div class="price">Rp 450K</div>
+          <button class="btn-buy" onclick="openModal({name:'Headphone Pro X1', price:450000})">BELI SEKARANG</button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="product-card" onclick="openModal({name:'Smartwatch Z Series', price:850000, emoji:'⌚'})">
-    <div class="product-img">⌚</div>
-    <div class="product-body">
-      <div class="product-name">Smartwatch Z Series</div>
-      <div class="product-desc">Monitor detak jantung, GPS, tahan air IPX7. Layar AMOLED 1.8 inci.</div>
-      <div class="product-footer">
-        <div class="price">Rp 850K <sub>/ unit</sub></div>
-        <button class="btn-buy">BELI SEKARANG</button>
+    <div class="product-card">
+      <div class="product-img">⌚</div>
+      <div class="product-body">
+        <div class="product-name">Smartwatch Z Series</div>
+        <div class="product-desc">Monitor detak jantung, GPS, tahan air IPX7. Layar AMOLED.</div>
+        <div class="product-footer">
+          <div class="price">Rp 850K</div>
+          <button class="btn-buy" onclick="openModal({name:'Smartwatch Z Series', price:850000})">BELI SEKARANG</button>
+        </div>
       </div>
-    </div>
-  </div>
-
-  <div class="product-card" onclick="openModal({name:'Mechanical Keyboard TKL', price:620000, emoji:'⌨️'})">
-    <div class="product-img">⌨️</div>
-    <div class="product-body">
-      <div class="product-name">Mechanical Keyboard TKL</div>
-      <div class="product-desc">Switch Brown, hot-swap, RGB per-key. Compact TKL ideal untuk setup produktif.</div>
-      <div class="product-footer">
-        <div class="price">Rp 620K <sub>/ unit</sub></div>
-        <button class="btn-buy">BELI SEKARANG</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="how">
-  <div class="section-label">— CARA KERJA SISTEM PEMBAYARAN —</div>
-  <div class="steps">
-    <div class="step">
-      <div class="step-num">01</div>
-      <div class="step-icon">🛒</div>
-      <div class="step-title">Pilih Produk</div>
-      <div class="step-desc">Klik tombol "Beli Sekarang" pada produk yang kamu inginkan.</div>
-    </div>
-    <div class="step">
-      <div class="step-num">02</div>
-      <div class="step-icon">📋</div>
-      <div class="step-title">Isi Data Diri</div>
-      <div class="step-desc">Masukkan nama lengkap dan alamat pengiriman yang valid.</div>
-    </div>
-    <div class="step highlight">
-      <div class="step-num">03</div>
-      <div class="step-icon">📲</div>
-      <div class="step-title">Scan QR & Bayar</div>
-      <div class="step-desc">Scan QRIS dan bayar TEPAT sesuai nominal. Batas waktu 15 menit.</div>
-    </div>
-    <div class="step highlight">
-      <div class="step-num">04</div>
-      <div class="step-icon">📎</div>
-      <div class="step-title">Upload Bukti</div>
-      <div class="step-desc">Kirim screenshot bukti transfer. Tanpa bukti valid, pesanan otomatis dibatalkan.</div>
-    </div>
-    <div class="step">
-      <div class="step-num">05</div>
-      <div class="step-icon">🔍</div>
-      <div class="step-title">Verifikasi Admin</div>
-      <div class="step-desc">Tim kami memverifikasi pembayaran secara manual sebelum proses kirim.</div>
-    </div>
-    <div class="step">
-      <div class="step-num">06</div>
-      <div class="step-icon">📦</div>
-      <div class="step-title">Produk Dikirim</div>
-      <div class="step-desc">Hanya setelah pembayaran 100% dikonfirmasi, barang dikirim via kurir.</div>
     </div>
   </div>
 </div>
 
 <footer>
   <strong>TOKO PREMIUM</strong> — Sistem Pembayaran Terverifikasi<br>
-  ⚠️ Produk <strong>hanya dikirim</strong> setelah pembayaran diterima & diverifikasi tim kami.<br>
-  Tidak menerima COD · Tidak ada refund jika bukti bayar palsu · Hubungi CS: <strong>0812-XXXX-XXXX</strong>
+  ⚠️ Tidak menerima COD · Hubungi CS: <strong>0812-XXXX-XXXX</strong>
 </footer>
 
 <div class="modal-backdrop" id="modalBackdrop" onclick="handleBackdropClick(event)">
-  <div class="modal" id="modal">
+  <div class="modal" id="modal" onclick="event.stopPropagation()">
     <div class="modal-header">
       <div class="modal-title" id="modalTitle">DETAIL PESANAN</div>
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
     <div class="modal-body">
-
       <div class="pay-progress" id="payProgress">
         <span></span><span></span><span></span><span></span><span></span>
       </div>
@@ -617,4 +236,95 @@
       <div class="pay-step active" id="step1">
         <div class="order-summary">
           <div class="order-row"><span>Produk</span><span id="s1ProductName">—</span></div>
-          <div class="order-ro
+          <div class="order-row"><span>Harga</span><span id="s1Price">—</span></div>
+          <div class="order-row total"><span>Total Bayar</span><span id="s1Total">—</span></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">NAMA LENGKAP PENERIMA</label>
+          <input class="form-input" id="inputNama" type="text" placeholder="Masukkan nama..."/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">NOMOR TELEPON / WA</label>
+          <input class="form-input" id="inputPhone" type="tel" placeholder="08xxxxxxxxxx"/>
+        </div>
+        <button class="btn-full" onclick="goToStep(2)">LANJUT KE PEMBAYARAN →</button>
+        <button class="btn-full secondary" onclick="closeModal()">BATAL</button>
+      </div>
+
+      <div class="pay-step" id="step2">
+        <div class="qr-wrapper">
+          <div class="qr-label">SCAN QRIS DI BAWAH INI</div>
+          <div class="qr-frame">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <rect width="100" height="100" fill="white"/>
+              <rect x="5" y="5" width="30" height="30" rx="3" fill="black"/><rect x="8" y="8" width="24" height="24" rx="2" fill="white"/><rect x="11" y="11" width="18" height="18" rx="1" fill="black"/>
+              <rect x="65" y="5" width="30" height="30" rx="3" fill="black"/><rect x="68" y="8" width="24" height="24" rx="2" fill="white"/><rect x="71" y="11" width="18" height="18" rx="1" fill="black"/>
+              <rect x="5" y="65" width="30" height="30" rx="3" fill="black"/><rect x="8" y="68" width="24" height="24" rx="2" fill="white"/><rect x="11" y="71" width="18" height="18" rx="1" fill="black"/>
+            </svg>
+          </div>
+          <div class="amount-due" id="s2Total">Rp 0</div>
+        </div>
+        <div class="bank-info">
+          <div class="bank-row"><span>Kode Unik</span><span id="s2Unik">—</span></div>
+        </div>
+        <div class="countdown-wrap">
+          <div class="countdown-icon">⏰</div>
+          <div class="countdown-text">Waktu Bayar: <span id="timer">15:00</span></div>
+        </div>
+        <button class="btn-full" onclick="goToStep(3)">SUDAH BAYAR → UPLOAD BUKTI</button>
+        <button class="btn-full secondary" onclick="goToStep(1)">← KEMBALI</button>
+      </div>
+
+      <div class="pay-step" id="step3">
+        <div class="warning-box">
+          🚫 <strong>PERINGATAN KERAS:</strong> Sistem verifikasi server aktif. Bukti palsu otomatis terblokir.
+        </div>
+        <div class="upload-area" id="uploadArea">
+          <input type="file" accept="image/*" id="fileInput" onchange="handleFile(event)"/>
+          <div class="upload-icon">📎</div>
+          <div class="upload-text">Tap untuk upload screenshot bukti transfer<br>Maks 5MB</div>
+        </div>
+        <div class="upload-preview" id="uploadPreview">✅ File siap: <span id="fileName"></span></div>
+        <button class="btn-full" onclick="submitProof()">KIRIM BUKTI PEMBAYARAN</button>
+        <button class="btn-full secondary" onclick="goToStep(2)">← KEMBALI</button>
+      </div>
+
+      <div class="pay-step" id="step4">
+        <div class="verify-anim">
+          <div class="spinner"></div>
+          <div>
+            <div style="font-weight:700; margin-bottom:0.3rem;">Validasi Sistem...</div>
+            <div class="verify-status" id="verifyStatus">Menghubungi Server Vercel...</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pay-step" id="step5">
+        <div class="success-wrap">
+          <div class="success-icon">✅</div>
+          <div class="success-title">BUKTI DITERIMA!</div>
+          <div class="success-sub">Sistem telah memvalidasi bukti kamu. Pesanan segera dikerjakan.</div>
+          <div class="order-code" id="orderCode">ORDER-XXXXXXXX</div>
+        </div>
+        <button class="btn-full" style="margin-top:1.5rem;" onclick="closeModal()">SELESAI</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  let currentProduct = null;
+  let timerInterval = null;
+  let timeLeft = 900; 
+
+  function formatRp(n) { return 'Rp ' + n.toLocaleString('id-ID'); }
+
+  function openModal(product) {
+    currentProduct = product;
+    const total = product.price;
+    currentProduct.unik = Math.floor(Math.random() * 900) + 100;
+    currentProduct.totalWithUnik = total + currentProduct.unik;
+
+    document.getElementById('s1ProductName').textContent = product.name;
+  
